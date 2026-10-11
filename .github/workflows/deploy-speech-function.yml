@@ -1,0 +1,28 @@
+name: Deploy Speech Function
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "api/speech/**"
+      - ".github/workflows/deploy-speech-function.yml"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Azure Functions Core Tools
+        run: npm install -g azure-functions-core-tools@4 --unsafe-perm true
+
+      - name: Publish Function App
+        run: func azure functionapp publish func-blog-audiobook --javascript
