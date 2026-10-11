@@ -99,3 +99,5 @@ function escapeXml(value) {
     "'": "&apos;"
   })[char]);
 }
+
+
