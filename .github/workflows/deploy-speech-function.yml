@@ -1,3 +1,4 @@
+
 name: Deploy Speech Function
 
 on:
@@ -21,8 +22,9 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Install Azure Functions Core Tools
-        run: npm install -g azure-functions-core-tools@4 --unsafe-perm true
-
-      - name: Publish Function App
-        run: func azure functionapp publish func-blog-audiobook --javascript
+      - name: Deploy Function App
+        uses: Azure/functions-action@v1
+        with:
+          app-name: func-blog-audiobook
+          package: api/speech
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
