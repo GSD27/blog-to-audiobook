@@ -1,1 +1,148 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Turn written articles and stories into audiobooks.">
+  <title>Blog to Audiobook</title>
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #20283b;
+      background: #f4f7fc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body { margin: 0; }
+
+    header {
+      padding: 22px 7%;
+      background: #fff;
+      border-bottom: 1px solid #e4e9f2;
+    }
+
+    header strong { font-size: 1.2rem; color: #4d46c8; }
+
+    main { max-width: 850px; margin: 45px auto; padding: 0 20px; }
+
+    .intro { text-align: center; margin-bottom: 28px; }
+
+    .intro h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 12px; }
+
+    .intro p { color: #647087; line-height: 1.6; }
+
+    .panel {
+      background: #fff;
+      padding: 28px;
+      border: 1px solid #e3e8f2;
+      border-radius: 18px;
+      box-shadow: 0 10px 35px #243b6810;
+    }
+
+    label { display: block; font-weight: 650; margin: 18px 0 9px; }
+
+    textarea, select {
+      width: 100%;
+      border: 1px solid #cbd4e4;
+      border-radius: 10px;
+      padding: 13px;
+      font: inherit;
+      background: white;
+    }
+
+    textarea { min-height: 220px; resize: vertical; line-height: 1.6; }
+
+    .hint { color: #647087; font-size: .9rem; margin-top: 8px; }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 13px 18px;
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .primary { background: #5146d8; color: white; width: 100%; margin-top: 22px; }
+    .primary:hover { background: #4035bd; }
+
+    .status { margin-top: 18px; padding: 13px; border-radius: 10px; background: #f0f3fa; line-height: 1.5; }
+    .hidden { display: none; }
+
+    footer { text-align: center; color: #718096; font-size: .9rem; padding: 25px; }
+
+    @media (max-width: 520px) {
+      .panel { padding: 19px; }
+      main { margin-top: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>🎧 Blog to Audiobook</strong>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h1>Give your words a voice.</h1>
+      <p>Turn articles, notes, and stories into audio you can listen to anywhere.</p>
+    </section>
+
+    <section class="panel">
+      <form id="audioForm">
+        <label for="blogText">Paste your text</label>
+        <textarea id="blogText" maxlength="20000"
+          placeholder="Paste your blog article or story here..."
+          required></textarea>
+        <div class="hint"><span id="characterCount">0</span> / 20,000 characters</div>
+
+        <label for="style">Choose a narration style</label>
+        <select id="style">
+          <option value="adult">Visually impaired adult — clear, steady narration</option>
+          <option value="child">Child / bedtime story — gentle, expressive narration</option>
+        </select>
+
+        <button class="primary" type="submit">Prepare my audiobook</button>
+      </form>
+
+      <div id="status" class="status hidden" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer>Made for more accessible reading. Your text stays in this page for now.</footer>
+
+  <script>
+    const textInput = document.getElementById("blogText");
+    const count = document.getElementById("characterCount");
+    const status = document.getElementById("status");
+
+    textInput.addEventListener("input", () => {
+      count.textContent = textInput.value.length;
+    });
+
+    document.getElementById("audioForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const text = textInput.value.trim();
+      if (!text) {
+        status.textContent = "Please paste some text first.";
+        status.classList.remove("hidden");
+        return;
+      }
+
+      const style = document.getElementById("style").value;
+      const description = style === "adult"
+        ? "clear, steady adult narration"
+        : "gentle, expressive bedtime-story narration";
+
+      status.textContent =
+        `Your text is ready (${text.length} characters) for ${description}. ` +
+        "Next, we'll connect Azure AI Speech to generate the actual audio.";
+      status.classList.remove("hidden");
+    });
+  </script>
+</body>
+</html>
