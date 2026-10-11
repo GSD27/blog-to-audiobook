@@ -1,4 +1,3 @@
-
 name: Deploy Speech Function
 
 on:
@@ -6,8 +5,12 @@ on:
     branches:
       - main
     paths:
-      - "api/speech/**"
+      - "api/**"
       - ".github/workflows/deploy-speech-function.yml"
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   build-and-deploy:
@@ -16,6 +19,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -28,4 +38,3 @@ jobs:
           app-name: func-blog-audiobook
           sku: flexconsumption
           package: api/speech
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
