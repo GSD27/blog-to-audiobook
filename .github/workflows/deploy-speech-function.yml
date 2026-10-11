@@ -26,5 +26,6 @@ jobs:
         uses: Azure/functions-action@v1
         with:
           app-name: func-blog-audiobook
+          sku: flexconsumption
           package: api/speech
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
